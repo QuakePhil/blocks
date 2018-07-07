@@ -50,6 +50,8 @@ Draw.prototype.world = function (offsetx, offsety, scale) {
   this.offsetx = offsetx
   this.offsety = offsety
 
+
+  let drawn = created = 0
   for (let x = Math.floor(-this.offsetx / this.scale / 21);
     x <= Math.floor((this.ctx.canvas.width - this.offsetx) / this.scale / 21);
     ++x)
@@ -73,8 +75,11 @@ Draw.prototype.world = function (offsetx, offsety, scale) {
         content: this.architect.generateStreets()
       }
       blocks.push(block)
+      created++
     }
 
     this.streets(block.x, block.y, block.content)
+    drawn++
   }
+  console.log("Drawn: " + drawn + " (created: " + created + ")")
 }

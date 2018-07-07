@@ -14,6 +14,10 @@ let Viewport = function (canvas) {
   canvas.onmousemove = this.onmousemove.bind(this)
   canvas.onmousewheel = this.onmousewheel.bind(this)
 
+  this.redraw()
+}
+
+Viewport.prototype.redraw = function() {
   this.draw.world(this.offsetx, this.offsety, this.scale)
 }
 
@@ -36,7 +40,7 @@ Viewport.prototype.onmousemove = function(e) {
     // drag
     this.offsetx = this.dragx + e.clientX
     this.offsety = this.dragy + e.clientY
-    this.draw.world(this.offsetx, this.offsety, this.scale)
+    this.redraw()
   }
 
   return false
@@ -56,7 +60,7 @@ Viewport.prototype.onmousewheel = function(e) {
   this.offsety -= (e.clientY - this.offsety) / this.scale * increment
   this.scale += increment
 
-  this.draw.world(this.offsetx, this.offsety, this.scale)
+  this.redraw()
 
   return false
 }

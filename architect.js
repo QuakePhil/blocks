@@ -1,6 +1,5 @@
 let Architect = function () {
   this.seed = Math.random() * 100; // avoid multiple of Math.PI
-  console.log(this.seed)
 }
 
 Architect.prototype.random = function() {
@@ -96,14 +95,3 @@ Architect.prototype.generateStreets = function() {
       { type: 'building', name: 'House' },
     ]
   }*/
-
-let blocks = []
-let architect = new Architect()
-
-for (let x = 0; x < 500; x += 21) for (let y = 0; y < 500; y += 21) {
-  blocks.push({
-    x: x,
-    y: y,
-    content: architect.generateStreets()
-  })
-}

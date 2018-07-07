@@ -1,5 +1,6 @@
 let Draw = function (canvas) {
   this.ctx = canvas.getContext('2d')
+  this.architect = new Architect()
 }
 
 Draw.prototype.offsetAndScale = function(x, y) {
@@ -28,11 +29,15 @@ Draw.prototype.scaleFillRect = function(x, y, width, height) {
 }
 
 Draw.prototype.scaleFillText = function(text, x, y) {
+  if (this.scale < 20) return
   xy = this.offsetAndScale(x, y)
   let lineheight = this.scale / 2 // approximate
   this.ctx.font = "" + lineheight + "px Verdana"
   this.ctx.fillText(text, 5 + xy[0], 5 + xy[1] + lineheight)
 }
+
+
+let blocks = []
 
 // entry point
 Draw.prototype.world = function (offsetx, offsety, scale) {
@@ -45,12 +50,31 @@ Draw.prototype.world = function (offsetx, offsety, scale) {
   this.offsetx = offsetx
   this.offsety = offsety
 
-  // adjust offset so that unit being controlled can be seen
-
-  // render
-  for (let i in blocks) {
-    if (this.blockIsInViewport(blocks[i])) {
-      this.streets(blocks[i].x, blocks[i].y, blocks[i].content)
+  for (let x = Math.floor(-this.offsetx / this.scale / 21);
+    x <= Math.floor((this.ctx.canvas.width - this.offsetx) / this.scale / 21);
+    ++x)
+  for (let y = Math.floor(-this.offsety / this.scale / 21);
+    y <= Math.floor((this.ctx.canvas.height - this.offsety) / this.scale / 21);
+    ++y) {
+    // check if already has been generated
+    let block = false
+    for (let i in blocks) {
+      if (blocks[i].x == x * 21 && blocks[i].y == y * 21) {
+        block = blocks[i]
+        break;
+      }
     }
+
+    // generate if not found
+    if (block === false) {
+      block = {
+        x: x * 21,
+        y: y * 21,
+        content: this.architect.generateStreets()
+      }
+      blocks.push(block)
+    }
+
+    this.streets(block.x, block.y, block.content)
   }
 }

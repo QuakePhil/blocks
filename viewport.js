@@ -3,7 +3,7 @@ let Viewport = function (canvas) {
   this.height = canvas.height
 
   this.draw = new Draw(canvas)
-  this.mousepressed = false
+  this.mousedown = false
   this.scale = 10
   this.offsetx = 0
   this.offsety = 0
@@ -14,29 +14,29 @@ let Viewport = function (canvas) {
   canvas.onmousemove = this.onmousemove.bind(this)
   canvas.onmousewheel = this.onmousewheel.bind(this)
 
-  this['draw'].world(this.offsetx, this.offsety, this.scale)
+  this.draw.world(this.offsetx, this.offsety, this.scale)
 }
 
 Viewport.prototype.onmousedown = function(e) {
-  this.mousepressed = true
+  this.mousedown = true
   this.dragx = this.offsetx - e.clientX
   this.dragy = this.offsety - e.clientY
 }
 
 Viewport.prototype.onmouseup = function(e) {
-  if (this.mousepressed) {
+  if (this.mousedown) {
     // click
   }
 
-  this.mousepressed = false
+  this.mousedown = false
 }
 
 Viewport.prototype.onmousemove = function(e) {
-  if (this.mousepressed) {
+  if (this.mousedown) {
     // drag
     this.offsetx = this.dragx + e.clientX
     this.offsety = this.dragy + e.clientY
-    this['draw'].world(this.offsetx, this.offsety, this.scale)
+    this.draw.world(this.offsetx, this.offsety, this.scale)
   }
 
   return false
@@ -56,7 +56,7 @@ Viewport.prototype.onmousewheel = function(e) {
   this.offsety -= (e.clientY - this.offsety) / this.scale * increment
   this.scale += increment
 
-  this['draw'].world(this.offsetx, this.offsety, this.scale)
+  this.draw.world(this.offsetx, this.offsety, this.scale)
 
   return false
 }

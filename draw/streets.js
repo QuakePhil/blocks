@@ -76,6 +76,10 @@ Draw.prototype.streets = function (x, y, contents) {
   this.ctx.fillStyle = 'grey'
   this.scaleFillRect(x, y, 4, 21) // asphalt
   this.scaleFillRect(x, y, 21, 4)
+  if (x % 105 == 0 && y % 105 == 0) { // every 5 (21 * 5 = 105) is a subway hatch
+    this.ctx.fillStyle = 'black'
+    this.scaleFillArc(x + 2, y + 2, 0.5)
+  } 
   this.ctx.fillStyle = 'lightgrey'
   this.scaleFillRect(x + 4, y + 4, 1, 17) // sidewalk
   this.scaleFillRect(x + 4, y + 4, 17, 1)

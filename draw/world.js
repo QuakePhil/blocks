@@ -34,9 +34,7 @@ Draw.prototype.scaleFillRect = function(x, y, width, height) {
 
 Draw.prototype.scaleFillArc = function(x, y, r) {
   let xy = this.offsetAndScale(x, y)
-  this.ctx.beginPath()
-  this.ctx.arc(xy[0], xy[1], r * this.scale, 2 * Math.PI, false)
-  this.ctx.fill()
+  this.fillArc(xy[0], xy[1], r * this.scale)
 }
 
 Draw.prototype.scaleFillText = function(text, x, y) {
@@ -69,16 +67,42 @@ Draw.prototype.fillEllipse = function(x, y, w, h) {
   this.ctx.fill();
 }
 
+// https://stackoverflow.com/questions/1255512/how-to-draw-a-rounded-rectangle-on-html-canvas#3368118
+Draw.prototype.fillRoundedRect = function(x, y, w, h) {
+  x -= w/2.0
+  y -= h/2.0
+  let radius = this.scale * 0.1
+  radius = {tl: radius, tr: radius, br: radius, bl: radius};
+  this.ctx.beginPath();
+  this.ctx.moveTo(x + radius.tl, y);
+  this.ctx.lineTo(x + w - radius.tr, y);
+  this.ctx.quadraticCurveTo(x + w, y, x + w, y + radius.tr);
+  this.ctx.lineTo(x + w, y + h - radius.br);
+  this.ctx.quadraticCurveTo(x + w, y + h, x + w - radius.br, y + h);
+  this.ctx.lineTo(x + radius.bl, y + h);
+  this.ctx.quadraticCurveTo(x, y + h, x, y + h - radius.bl);
+  this.ctx.lineTo(x, y + radius.tl);
+  this.ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+  this.ctx.closePath();
+  this.ctx.fill();
+}
+
+Draw.prototype.fillArc = function(x, y, r) {
+  this.ctx.beginPath()
+  this.ctx.arc(x, y, r, 2 * Math.PI, false)
+  this.ctx.fill()
+}
+
 Draw.prototype.dude = function(unit) {
   let xy = this.offsetAndScale(unit.x, unit.y)
   this.ctx.fillStyle = unit.shirt
-  this.fillEllipse(xy[0], xy[1], unit.weight / 150 * this.scale, unit.height / 200 * this.scale)
+  this.fillRoundedRect(xy[0], xy[1], unit.weight / 150 * this.scale, unit.height / 200 * this.scale)
   this.ctx.fillStyle = unit.skin
   // head
-  this.fillEllipse(xy[0], xy[1] - unit.height * this.scale / 320, unit.weight / 300 * this.scale, unit.weight / 300 * this.scale)
+  this.fillArc(xy[0], xy[1] - unit.height * this.scale / 320, unit.weight / 600 * this.scale)
   // weapons
-  this.fillEllipse(xy[0] - unit.height * this.scale / 480, xy[1] - unit.height * this.scale / 800, unit.weight / 400 * this.scale, unit.weight / 400 * this.scale)
-  this.fillEllipse(xy[0] + unit.height * this.scale / 480, xy[1] - unit.height * this.scale / 800, unit.weight / 400 * this.scale, unit.weight / 400 * this.scale)
+  this.fillArc(xy[0] - unit.height * this.scale / 480, xy[1] - unit.height * this.scale / 1600, unit.weight / 800 * this.scale)
+  this.fillArc(xy[0] + unit.height * this.scale / 480, xy[1] - unit.height * this.scale / 1600, unit.weight / 800 * this.scale)
 }
 
 let blocks = []

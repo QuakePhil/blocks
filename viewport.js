@@ -12,6 +12,7 @@ let Viewport = function (canvas) {
   this.offsetx = 0
   this.offsety = 0
   this.draw = new Draw(canvas, this)
+  this.waypoints = []
 
   this.dragx = 0
   this.dragy = 0
@@ -75,7 +76,8 @@ Viewport.prototype.keyboard = function(i) {
 
 Viewport.prototype.onkeyboard = function(e) {
   keyboard[e.keyCode] = e.type == 'keydown'
-  if (e.type == 'keydown') {
+  /*
+  //if (e.type == 'keydown') {
     //          87 - w
     // 65 - a   83 = s   68 - d
     let doublekey = false
@@ -101,11 +103,10 @@ Viewport.prototype.onkeyboard = function(e) {
       if (this.keyboard(83)) units[this.unit].angle = 90
       if (this.keyboard(65)) units[this.unit].angle = 180
     }
-    if (this.keyboard(32)) {
-      units[this.unit].angle = false
-    }
+  */
+  if (this.keyboard(32)) {
+    units[this.unit].angle = false
   }
-  this.redraw()
 }
 
 Viewport.prototype.onmousedown = function(e) {
@@ -115,15 +116,23 @@ Viewport.prototype.onmousedown = function(e) {
 }
 
 Viewport.prototype.onmouseup = function(e) {
-  if (this.mousedown) {
-    // click
+  if (this.mousedown && this.unit !== false && e.button == 0) {
+    let xy = this.draw.offsetAndScale(units[this.unit].x, units[this.unit].y)
+    units[this.unit].angle = Math.atan2(e.clientY - xy[1], e.clientX - xy[0]) * (180 / Math.PI)
+    this.waypoints = [
+      [
+        (e.clientX - this.offsetx) / this.scale,
+        (e.clientY - this.offsety) / this.scale
+      ]
+    ]
+    console.log(this.waypoints)
   }
 
   this.mousedown = false
 }
 
 Viewport.prototype.onmousemove = function(e) {
-  if (this.mousedown) {
+  if (this.mousedown && this.unit === false) {
     // drag
     this.offsetx = this.dragx + e.clientX
     this.offsety = this.dragy + e.clientY

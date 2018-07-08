@@ -22,8 +22,8 @@ Architect.prototype.generateDude = function(template = {}) {
   let weapons = ['fists', 'pistol']
   let dude = {
     angle: false,
-    x: 1,
-    y: 1,
+    x: 4.5,
+    y: 4.5,
     skin: this.pick(tones),
     shirt: this.pick(shirts),
     weight: this.randomBetween(67,120),

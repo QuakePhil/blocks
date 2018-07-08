@@ -1,9 +1,13 @@
-let Draw = function (canvas) {
+let Draw = function (canvas, viewport) {
   this.ctx = canvas.getContext('2d')
   this.architect = new Architect()
+  this.scale = viewport.scale
+  this.offsetx = viewport.offsetx
+  this.offsety = viewport.offsety
 }
 
 Draw.prototype.offsetAndScale = function(x, y) {
+  //console.log(this.scale, this.offsetx, this.offsety)
   x = x * this.scale
   y = y * this.scale
   x = x + this.offsetx
@@ -12,24 +16,24 @@ Draw.prototype.offsetAndScale = function(x, y) {
 }
 
 Draw.prototype.blockIsInViewport = function(block) {
-  xy = this.offsetAndScale(block.x, block.y)
-  xy21 = this.offsetAndScale(block.x+21, block.y+21) // blocks are 21 pixels wide at scale 1
+  let xy = this.offsetAndScale(block.x, block.y)
+  let xy21 = this.offsetAndScale(block.x+21, block.y+21) // blocks are 21 pixels wide at scale 1
   return !(xy[0] > this.ctx.canvas.width || xy[1] > this.ctx.canvas.height || xy21[0] < 0 || xy21[1] < 0)
 }
 
 Draw.prototype.scaleRect = function(x, y, width, height) {
-  xy = this.offsetAndScale(x, y) // [x, y] = ... not supported in IE :( 
+  let xy = this.offsetAndScale(x, y) // [x, y] = ... not supported in IE :( 
   this.ctx.rect(xy[0], xy[1], width * this.scale, height * this.scale)
   this.ctx.stroke()
 }
 
 Draw.prototype.scaleFillRect = function(x, y, width, height) {
-  xy = this.offsetAndScale(x, y)
+  let xy = this.offsetAndScale(x, y)
   this.ctx.fillRect(xy[0], xy[1], width * this.scale, height * this.scale)
 }
 
 Draw.prototype.scaleFillArc = function(x, y, r) {
-  xy = this.offsetAndScale(x, y)
+  let xy = this.offsetAndScale(x, y)
   this.ctx.beginPath()
   this.ctx.arc(xy[0], xy[1], r * this.scale, 2 * Math.PI, false)
   this.ctx.fill()
@@ -37,7 +41,7 @@ Draw.prototype.scaleFillArc = function(x, y, r) {
 
 Draw.prototype.scaleFillText = function(text, x, y) {
   if (this.scale < 20) return
-  xy = this.offsetAndScale(x, y)
+  let xy = this.offsetAndScale(x, y)
   let lineheight = this.scale / 2 // approximate
   this.ctx.font = "" + lineheight + "px Verdana"
   this.ctx.fillText(text, 5 + xy[0], 5 + xy[1] + lineheight)
@@ -66,7 +70,7 @@ Draw.prototype.fillEllipse = function(x, y, w, h) {
 }
 
 Draw.prototype.dude = function(unit) {
-  xy = this.offsetAndScale(unit.x, unit.y)
+  let xy = this.offsetAndScale(unit.x, unit.y)
   this.ctx.fillStyle = unit.shirt
   this.fillEllipse(xy[0], xy[1], unit.weight / 150 * this.scale, unit.height / 200 * this.scale)
   this.ctx.fillStyle = unit.skin

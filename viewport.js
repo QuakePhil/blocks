@@ -6,12 +6,13 @@ let Viewport = function (canvas) {
   this.width = canvas.width
   this.height = canvas.height
 
-  this.draw = new Draw(canvas)
   this.unit = false
   this.mousedown = false
   this.scale = 100
   this.offsetx = 0
   this.offsety = 0
+  this.draw = new Draw(canvas, this)
+
   this.dragx = 0
   this.dragy = 0
   canvas.onmousedown = this.onmousedown.bind(this)
@@ -48,11 +49,20 @@ Viewport.prototype.loop = function() {
   window.requestAnimationFrame(this.loop.bind(this))
 }
 
+Viewport.prototype.centerunit = function() {
+  if (this.unit === false) return
+  let xy = this.draw.offsetAndScale(units[this.unit].x, units[this.unit].y)
+  this.offsetx += this.width / 2 - xy[0]
+  this.offsety += this.height / 2 - xy[1]
+}
+
 Viewport.prototype.indexunit = function(i) {
   this.unit = i
+  this.centerunit()
 }
 
 Viewport.prototype.redraw = function() {
+  this.centerunit()
   this.draw.world(this.offsetx, this.offsety, this.scale)
 }
 
@@ -91,7 +101,9 @@ Viewport.prototype.onkeyboard = function(e) {
       if (this.keyboard(83)) units[this.unit].angle = 90
       if (this.keyboard(65)) units[this.unit].angle = 180
     }
-    if (this.keyboard(32)) units[this.unit].angle = false
+    if (this.keyboard(32)) {
+      units[this.unit].angle = false
+    }
   }
   this.redraw()
 }

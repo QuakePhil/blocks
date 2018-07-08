@@ -12,10 +12,12 @@ window.onload = function() {
   units.push(arch.generateDude())
   view.indexunit(units.length-1)
   view.redraw()
+  canvas.focus()
 
   window.onresize = function() {
     canvas.width = window.innerWidth // some cleaner way to avoid scrollbars?
     canvas.height = window.innerHeight - 4
     view.redraw()
+    canvas.focus()
   }
 }

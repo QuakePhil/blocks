@@ -1,4 +1,4 @@
-let Block = function (generator, x, y, width, height) {
+var Block = function (generator, x, y, width, height) {
   this.x = x
   this.y = y
   this.width = width

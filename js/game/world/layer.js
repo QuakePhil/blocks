@@ -1,4 +1,4 @@
-let Layer = function () {
+var Layer = function () {
   this.blockwidth = 21
   this.blockheight = 21
 

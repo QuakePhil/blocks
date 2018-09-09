@@ -1,4 +1,4 @@
-let Generator = function() {
+var Generator = function() {
   this.seed = Math.random() * 100; // avoid multiple of Math.PI
   // before setting this to a cosntant, remember:
   // zooming out+roaming is not reproducible

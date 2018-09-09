@@ -1,4 +1,4 @@
-let Game = function (canvas) {
+var Game = function (canvas) {
   this.canvas = canvas // for focus
   this.engine = new Engine(this, canvas)
 

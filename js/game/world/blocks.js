@@ -1,4 +1,4 @@
-let Blocks = function(width, height) {
+var Blocks = function(width, height) {
   this.blocks = []
   this.width = width
   this.height = height

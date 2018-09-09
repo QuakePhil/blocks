@@ -1,4 +1,4 @@
-let Engine = function (game, canvas) {
+var Engine = function (game, canvas) {
   this.game = game
   this.ctx = canvas.getContext('2d')
   this.width = canvas.width // refactor: use this.ctx.canvas.w/h

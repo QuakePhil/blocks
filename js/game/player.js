@@ -1,4 +1,4 @@
-let Player = function (layer, generator, x, y) {
+var Player = function (layer, generator, x, y) {
   this.layer = layer
   this.waypoints = []
   this.x = x
